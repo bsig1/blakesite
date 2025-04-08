@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import {useEffect, useState} from 'react'
 import bslogo from './assets/logo.svg'
 import './App.css'
 import ReactDOM from "react-dom/client";
@@ -7,8 +7,18 @@ import Layout from "./pages/Layout";
 import Home from "./pages/Home";
 import Contact from "./pages/Contact";
 import NoPage from "./pages/NoPage";
-function App() {
 
+
+const RedirectPage = () => {
+    React.useEffect(() => {
+        window.location.replace('https://www.google.com')
+    }, [])
+}
+function App() {
+    if(window.location.host.split('.')[0]==="mc"){
+        window.location.href = "https://blakesite.net";
+
+    }
   return (
     <>
         <div id="navbar">
