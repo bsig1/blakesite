@@ -11,21 +11,20 @@ function App() {
 
   return (
     <>
-        <div id="logo">
-            <img src={bslogo} alt="BS"  />
+        <div id="navbar">
+            <div id="logo">
+                <img src={bslogo} alt="BS"  />
+            </div>
+            <BrowserRouter id="navigation">
+                <Routes>
+                    <Route path="/" element={<Layout />}>
+                        <Route index element={<Home />} />
+                        <Route path="contact" element={<Contact />} />
+                        <Route path="*" element={<NoPage />} />
+                    </Route>
+                </Routes>
+            </BrowserRouter>
         </div>
-        <div id ="title">
-            <h1>blakesite</h1>
-        </div>
-        <BrowserRouter>
-            <Routes>
-                <Route path="/" element={<Layout />}>
-                    <Route index element={<Home />} />
-                    <Route path="contact" element={<Contact />} />
-                    <Route path="*" element={<NoPage />} />
-                </Route>
-            </Routes>
-        </BrowserRouter>
     </>
   )
 }
