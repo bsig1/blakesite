@@ -15,10 +15,6 @@ const RedirectPage = () => {
     }, [])
 }
 function App() {
-    if(window.location.host.split('.')[0]==="mc" || window.location.host.split('.')[1]==="mc"){
-        window.location.href = "184.167.249.206:24464";
-
-    }
   return (
     <>
         <div id="navbar">
