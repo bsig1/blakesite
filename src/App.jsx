@@ -1,4 +1,3 @@
-import {useEffect, useState} from 'react'
 import bslogo from './assets/logo.svg'
 import './App.css'
 import ReactDOM from "react-dom/client";
@@ -9,11 +8,6 @@ import Contact from "./pages/Contact";
 import NoPage from "./pages/NoPage";
 
 
-const RedirectPage = () => {
-    React.useEffect(() => {
-        window.location.replace('https://www.google.com')
-    }, [])
-}
 function App() {
   return (
     <>
