@@ -9,5 +9,10 @@
     width: 200px;
     height: 200px;
     margin: 30px;
-    background-color: white;
+    background-color: transparent;
+
+}
+img{
+    width: 100%;
+    background-color: transparent;
 }

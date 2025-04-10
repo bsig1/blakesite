@@ -17,9 +17,11 @@
   transition: filter 300ms;
 }
 
-#title{
-
-  flex: 1;
+.page-title{
+  border-bottom: aliceblue;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  padding-bottom: 15px;
 }
 
 #page{
