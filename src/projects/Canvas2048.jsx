@@ -36,6 +36,8 @@ class Board {
             }
             this.state.push(row);
         }
+        this.generate_tile();
+        this.generate_tile();
     }
     set_square(x,y,tile){
         this.state[y][x] = tile;
@@ -51,12 +53,26 @@ class Board {
         let empty_squares = [];
         for (let y = 0; y < 4; y++) {
             for (let x = 0; x < 4; x++) {
-                empty_squares.push(this.get_square(x,y));
+                let square = this.get_square(x,y);
+                if(square.value===-1) {
+                    empty_squares.push(square);
+                }
             }
         }
         let location = empty_squares[getRandomInt(empty_squares.length)];
 
         this.set_square(location.x,location.y,new Tile(value,location.x,location.y));
+    }
+
+    make_move(direction){ //direction is an array of size 2, (x,y) where one value is + or - 1
+        if(direction[0]!==0 && direction[1]!==0){
+            return false;
+        }
+        let dx = Math.sign(direction[0]);
+        let dy = Math.sign(direction[1]);
+
+
+
 
     }
 }
@@ -65,9 +81,13 @@ class Board {
 const Canvas = props => {
 
     const canvasRef = useRef(null);
+    let board = new Board();
+
     useEffect(() => {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
+
+
 
         // Draw board lines
         for (let i = 0; i < 4; i++) {
@@ -85,16 +105,15 @@ const Canvas = props => {
             ctx.stroke();
             ctx.closePath();
         }
-        let b = new Board();
-        b.generate_tile();
-        b.generate_tile();
+
+
 
         ctx.font = "48px Comic Sans MS";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         for (let x = 0; x < 4; x++) {
             for (let y = 0; y < 4; y++) {
-                let square = b.get_square(x,y);
+                let square = board.get_square(x,y);
                 if(square && square.value!==-1){
                     ctx.fillText(String(square.value),x*100+50,y*100+50);
                 }
