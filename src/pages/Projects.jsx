@@ -12,9 +12,9 @@ const Projects = () => {
                     <img src={logo_2048} alt="2048"/>
                 </div>
             </Link>
-            <Link to="/projects/chess">
+            <Link to="/projects/Chess">
                 <div className="project-tile">
-                    <img src={logo_chess} alt="chess"/>
+                    <img src={logo_chess} alt="Chess"/>
                 </div>
             </Link>
 
