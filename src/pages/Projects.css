@@ -1,0 +1,19 @@
+#page-title{
+    border-bottom: aliceblue;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    padding-bottom: 15px;
+}
+
+.project-tile{
+    width: 200px;
+    height: 200px;
+    margin: 30px;
+    background-color: transparent;
+    display: inline-block;
+
+}
+img{
+    width: 100%;
+    background-color: transparent;
+}
