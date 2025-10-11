@@ -31,6 +31,3 @@ const Chess = () => {
 };
 
 export default Chess;
-
-
-export default Chess;
