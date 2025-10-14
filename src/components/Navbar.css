@@ -1,13 +1,11 @@
-/* Navbar.css — logo NavLink is outside the <ul> */
 
-/* ---- Design tokens ---- */
+
 :root {
     --nav-h: clamp(56px, 8vw, 88px);
     --nav-gutter: clamp(8px, 2vw, 20px);
     --nav-font: clamp(14px, 1.8vw, 20px);
 }
 
-/* ---- Shell ---- */
 nav {
     width: 100%;
     background: #111;
@@ -15,19 +13,17 @@ nav {
     border-bottom: 1px solid rgba(255,255,255,0.12);
 }
 
-/* Outer container holds logo (left) and menu (right) */
 #navContainer {
     max-width: 1400px;
     margin: 0 auto;
     padding: 0 var(--nav-gutter);
     display: flex;
     align-items: center;
-    justify-content: space-between;  /* logo stays left, menu goes right */
+    justify-content: space-between;
     gap: var(--nav-gutter);
     min-height: var(--nav-h);
 }
 
-/* Make sure the *first* NavLink (the logo) doesn’t get button styles */
 #navContainer > .nav-link {
     display: flex;
     align-items: center;
@@ -42,7 +38,6 @@ nav {
     display: block;
 }
 
-/* ---- Menu list ---- */
 .navBar {
     display: flex;
     align-items: center;
@@ -112,15 +107,48 @@ nav {
     }
 
     .button {
+        flex: none;
+        min-width: 100px;
         padding: 0.5em 0.9em;
         border-radius: 8px;
+    }
+    .navBar > li {
+        flex: 0 1 auto;
+        width: fit-content;
+    }
+
+}
+@media (max-width: 600px) {
+    .button {
+        padding: 0.6em 0.6em;
+        font-size: clamp(11px, 3.2vw, 15px);
+    }
+
+    .navBar {
+        gap: calc(var(--nav-gutter) * 0.4);
     }
 }
 
 /* Very small screens: center the link row but keep logo visually pinned left by container padding */
 @media (max-width: 480px) {
-    .navBar {
-        justify-content: center;
-        text-align: center;
+    body {
+        width: 100%;
     }
+    #navContainer{
+        width: 100%;
+    }
+    .navBar {
+        justify-content: flex-start;
+        text-align: center;
+        margin-left: 0;
+        margin-top: 0;
+        min-width: 0;
+    }
+    .navBar > li {
+        flex: 1 1 0;
+        padding-left: 0;
+        padding-right: 0;
+        min-width: 0;
+    }
+
 }
