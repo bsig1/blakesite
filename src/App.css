@@ -19,13 +19,13 @@
 
 .page-title{
   border-bottom: aliceblue;
-  border-bottom-width: 1px;
-  border-bottom-style: solid;
   padding-bottom: 15px;
+    margin-top: 0;
+    padding-top: 0;
 }
 
 #page{
-  margin-top: 3%;
+  margin-top: 125px;
   width: 100%;
   height: 100%;
 }
@@ -33,3 +33,5 @@
 #page-title{
   margin-top: 50px;
 }
+
+

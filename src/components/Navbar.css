@@ -1,48 +1,131 @@
-.navBar {
-    height: 100px;
-    width: auto;
+/* Navbar.css — logo NavLink is outside the <ul> */
 
+/* ---- Design tokens ---- */
+:root {
+    --nav-h: clamp(56px, 8vw, 88px);
+    --nav-gutter: clamp(8px, 2vw, 20px);
+    --nav-font: clamp(14px, 1.8vw, 20px);
 }
-#logo{
-    height: 100%;
-    flex-basis: auto;
-    margin: 0;
-}
-li{
-    padding: 0;
-}
-.logoLi{
-    margin-top: 0;
-}
-.button{
-    margin: 0;
+
+/* ---- Shell ---- */
+nav {
     width: 100%;
-    height: 70%;
-    padding-top: 17%;
+    background: #111;
+    color: #fff;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
 }
-.button:hover{
+
+/* Outer container holds logo (left) and menu (right) */
+#navContainer {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 var(--nav-gutter);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;  /* logo stays left, menu goes right */
+    gap: var(--nav-gutter);
+    min-height: var(--nav-h);
+}
+
+/* Make sure the *first* NavLink (the logo) doesn’t get button styles */
+#navContainer > .nav-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Logo scales with nav height and never stretches */
+#logo {
+    height: calc(var(--nav-h) * 0.7);
+    width: auto;
+    display: block;
+}
+
+/* ---- Menu list ---- */
+.navBar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--nav-gutter);
+    margin: 0;
+    margin-left: 80px;
+    padding: 0;        /* reset default UL padding */
+    list-style: none;
+    flex: 1 1 auto;    /* lets the menu take remaining space on the right */
+}
+
+/* Items */
+.navBar > li {
+    display: flex;
+    align-items: center;
+    margin: 0 10px;
+    padding: 0;
+    font-size: var(--nav-font);
+}
+
+/* Links (non-logo) */
+.nav-link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+}
+
+/* Button look for the text links */
+.button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.6em 1.1em;
+    border-radius: 10px;
+    transition: background 160ms ease, color 160ms ease;
+}
+
+/* Hover + active states */
+.button:hover {
     background-color: cornflowerblue;
     color: orange;
 }
-ul{
-    display: flex;
-    flex-direction: row;
-    list-style: none;
-    text-decoration: none;
-    color: white;
-}
-li{
-    font-size: 1.5em;
-    width: 10%;
-    margin-left: 3%;
 
+.nav-link.active .button {
+    background: #444;
+    color: #fff;
 }
-.nav-link{
-    color: inherit;
-    height: 100%;
-    width: 100%;
+
+/* Focus visibility */
+.nav-link:focus-visible .button,
+#navContainer > .nav-link:focus-visible {
+    outline: 2px solid #6aa9ff;
+    outline-offset: 3px;
+    border-radius: 10px;
 }
-nav{
-    width: 100%;
-    height: 100px;
+
+/* ---- Responsive ---- */
+
+/* When space gets tight, wrap: logo remains first row; links drop below, left-aligned */
+@media (max-width: 800px) {
+    #navContainer {
+        flex-wrap: wrap;
+    }
+
+    .navBar {
+        flex-basis: 100%;
+        justify-content: flex-start;
+        row-gap: calc(var(--nav-gutter) * 0.6);
+        column-gap: var(--nav-gutter);
+        margin-top: 6px;
+    }
+
+    .button {
+        padding: 0.5em 0.9em;
+        border-radius: 8px;
+    }
+}
+
+/* Very small screens: center the link row but keep logo visually pinned left by container padding */
+@media (max-width: 480px) {
+    .navBar {
+        justify-content: center;
+        text-align: center;
+    }
 }
