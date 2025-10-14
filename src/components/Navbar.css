@@ -104,15 +104,10 @@ nav {
 
 /* When space gets tight, wrap: logo remains first row; links drop below, left-aligned */
 @media (max-width: 800px) {
-    #navContainer {
-        flex-wrap: wrap;
-    }
 
     .navBar {
-        flex-basis: 100%;
         justify-content: flex-start;
         row-gap: calc(var(--nav-gutter) * 0.6);
-        column-gap: var(--nav-gutter);
         margin-top: 6px;
     }
 
