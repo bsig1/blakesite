@@ -48,6 +48,7 @@ nav {
     padding: 0;        /* reset default UL padding */
     list-style: none;
     flex: 1 1 auto;    /* lets the menu take remaining space on the right */
+    border-right: #f9f9f9 1px solid;
 }
 
 /* Items */
@@ -95,9 +96,34 @@ nav {
     border-radius: 10px;
 }
 
-/* ---- Responsive ---- */
+.username {
+    margin-right: 10px;
+    opacity: 0.85;
+    font-size: 1em;
+}
 
-/* When space gets tight, wrap: logo remains first row; links drop below, left-aligned */
+#account-options{
+    display: block;
+    text-align: left;
+}
+
+#signout{
+    border: none;
+    background: none;
+    font-size: 1em;
+    padding: 0;
+    font-weight: bold;
+    display: inline-block;
+}
+
+#deletebutton{
+    border: none;
+    background: none;
+    font-size: 1em;
+    padding: 0 0 0 20px;
+    font-weight: bold;
+    display: inline-block;
+}
 @media (max-width: 800px) {
 
     .navBar {
