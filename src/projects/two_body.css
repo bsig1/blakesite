@@ -1,0 +1,116 @@
+/* ---------- Layout ---------- */
+.tb-wrap {
+    max-width: 960px;
+    margin-inline: auto;
+    padding: 16px;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: 12px;
+    box-sizing: border-box;
+}
+.tb-wrap{
+    color: black;
+}
+
+/* Controls grid */
+.tb-controls {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+}
+@media (min-width: 768px) {
+    .tb-controls {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Card */
+.tb-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 12px;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+    background: #fff;
+}
+.tb-card-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+/* Rows */
+.tb-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+}
+.tb-row:last-child { margin-bottom: 0; }
+.tb-row-label {
+    width: 7rem;
+    flex: 0 0 auto;
+}
+.tb-range {
+    flex: 1 1 auto;
+}
+.tb-num {
+    width: 3.5rem;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Checkbox row */
+.tb-check {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+}
+
+/* Buttons */
+.tb-btn-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+}
+.tb-btn {
+    padding: 6px 10px;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    font-size: 0.9rem;
+    cursor: pointer;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    color: black;
+}
+.tb-btn:hover { background: #f9fafb; }
+
+/* ---------- Canvas ---------- */
+.tb-canvasWrap {
+    position: relative;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+    overflow: hidden;
+    overscroll-behavior: contain; /* prevents wheel/drag from yanking page */
+    background: #fff;
+    touch-action: pan-y; /* allow vertical page scroll outside canvas */
+}
+.tb-canvas {
+    display: block;
+    width: 100%;
+    height: 480px; /* fixed, not huge */
+}
+
+/* ---------- Tips ---------- */
+.tb-tips {
+    font-size: 12px;
+    color: #4b5563;
+}
+
+/* Optional: make sliders look a bit nicer across browsers */
+input[type="range"] {
+    accent-color: #2563eb;
+}

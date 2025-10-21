@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@aws-amplify/ui-react": "^6.13.0",
+    "amplify": "^0.0.11",
     "aws-amplify": "^6.15.7",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
@@ -32,6 +33,6 @@
     "globals": "^16.4.0",
     "tsx": "^4.20.6",
     "typescript": "^5.9.3",
-    "vite": "^7.1.7"
+    "vite": "^7.1.11"
   }
 }

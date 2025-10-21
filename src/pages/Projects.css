@@ -9,13 +9,11 @@
 }
 
 .project-tile {
-    flex: 1 1 180px;
-    max-width: 220px;
-    aspect-ratio: 1 / 1;
-    width: 100%;
-    display: block;
-    background: transparent;
+    width: 200px;            /* consistent width */
+    height: 200px;           /* consistent height */
+    flex: 0 0 auto;          /* prevents shrinking or growing */
     border-radius: 12px;
+    background: transparent;
     overflow: hidden;
     outline: 1px solid rgba(255,255,255,0.08);
     transition: transform 140ms ease, outline-color 140ms ease;
@@ -36,7 +34,6 @@
         gap: 12px;
     }
     .project-tile {
-        flex-basis: 140px;
         max-width: 200px;
     }
 }

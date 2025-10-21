@@ -1,9 +1,8 @@
-
-
+/* ========== Mobile-first base ========== */
 :root {
     --nav-h: clamp(56px, 8vw, 88px);
     --nav-gutter: clamp(8px, 2vw, 20px);
-    --nav-font: clamp(14px, 1.8vw, 20px);
+    --nav-font: clamp(13px, 3.2vw, 16px);
 }
 
 nav {
@@ -13,76 +12,77 @@ nav {
     border-bottom: 1px solid rgba(255,255,255,0.12);
 }
 
+/* Container */
 #navContainer {
     max-width: 1400px;
     margin: 0 auto;
     padding: 0 var(--nav-gutter);
+    min-height: var(--nav-h);
+
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: var(--nav-gutter);
-    min-height: var(--nav-h);
 }
 
+/* Logo */
 #navContainer > .nav-link {
     display: flex;
     align-items: center;
     text-decoration: none;
     color: inherit;
 }
-
-/* Logo scales with nav height and never stretches */
 #logo {
     height: calc(var(--nav-h) * 0.7);
     width: auto;
     display: block;
 }
 
+/* Links list — mobile: horizontal scroll if needed */
 .navBar {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    gap: var(--nav-gutter);
+    gap: calc(var(--nav-gutter) * 0.6);
     margin: 0;
-    margin-left: 80px;
-    padding: 0;        /* reset default UL padding */
+    padding: 0;
     list-style: none;
-    flex: 1 1 auto;    /* lets the menu take remaining space on the right */
-    border-right: #f9f9f9 1px solid;
-}
 
-/* Items */
+    flex: 1 1 auto;
+    overflow-x: auto;               /* mobile-friendly overflow */
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;          /* Firefox hide scrollbar */
+    border-right: none;             /* no divider on mobile */
+}
+.navBar::-webkit-scrollbar { display: none; }
+
 .navBar > li {
     display: flex;
     align-items: center;
-    margin: 0 10px;
-    padding: 0;
+    flex: 0 0 auto;                 /* keep items compact on mobile */
+    margin: 0;
     font-size: var(--nav-font);
 }
 
-/* Links (non-logo) */
 .nav-link {
     display: block;
     color: inherit;
     text-decoration: none;
 }
 
-/* Button look for the text links */
+/* Buttons */
 .button {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0.6em 1.1em;
-    border-radius: 10px;
+    padding: 0.6em 0.6em;           /* compact on mobile */
+    border-radius: 8px;
     transition: background 160ms ease, color 160ms ease;
 }
 
-/* Hover + active states */
 .button:hover {
     background-color: cornflowerblue;
     color: orange;
 }
-
 .nav-link.active .button {
     background: #444;
     color: #fff;
@@ -96,18 +96,15 @@ nav {
     border-radius: 10px;
 }
 
+/* Account bits */
 .username {
     margin-right: 10px;
     opacity: 0.85;
     font-size: 1em;
 }
-
-#account-options{
-    display: block;
-    text-align: left;
-}
-
-#signout{
+#account-options { text-align: left; }
+#signout,
+#deletebutton {
     border: none;
     background: none;
     font-size: 1em;
@@ -115,66 +112,29 @@ nav {
     font-weight: bold;
     display: inline-block;
 }
+#deletebutton { padding-left: 20px; }
 
-#deletebutton{
-    border: none;
-    background: none;
-    font-size: 1em;
-    padding: 0 0 0 20px;
-    font-weight: bold;
-    display: inline-block;
-}
-@media (max-width: 800px) {
-
-    .navBar {
-        justify-content: flex-start;
-        row-gap: calc(var(--nav-gutter) * 0.6);
-        margin-top: 6px;
-    }
-
+/* ========== Enhancements for wider screens ========== */
+@media (min-width: 600px) {
     .button {
-        flex: none;
-        min-width: 100px;
-        padding: 0.5em 0.9em;
-        border-radius: 8px;
+        padding: 0.6em 0.9em;
+        border-radius: 10px;
+        font-size: clamp(12px, 2vw, 18px);
+    }
+    .navBar {
+        gap: calc(var(--nav-gutter) * 0.8);
+    }
+}
+
+@media (min-width: 800px) {
+    .navBar {
+        overflow: visible;          /* no scroll needed on wide screens */
+        gap: var(--nav-gutter);
+        border-right: 1px solid #f9f9f9;
+        margin-left: 80px;          /* your original desktop spacing */
     }
     .navBar > li {
         flex: 0 1 auto;
-        width: fit-content;
+        margin: 0 10px;
     }
-
-}
-@media (max-width: 600px) {
-    .button {
-        padding: 0.6em 0.6em;
-        font-size: clamp(11px, 3.2vw, 15px);
-    }
-
-    .navBar {
-        gap: calc(var(--nav-gutter) * 0.4);
-    }
-}
-
-/* Very small screens: center the link row but keep logo visually pinned left by container padding */
-@media (max-width: 480px) {
-    body {
-        width: 100%;
-    }
-    #navContainer{
-        width: 100%;
-    }
-    .navBar {
-        justify-content: flex-start;
-        text-align: center;
-        margin-left: 0;
-        margin-top: 0;
-        min-width: 0;
-    }
-    .navBar > li {
-        flex: 1 1 0;
-        padding-left: 0;
-        padding-right: 0;
-        min-width: 0;
-    }
-
 }
