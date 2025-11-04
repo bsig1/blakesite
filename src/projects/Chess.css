@@ -3,8 +3,10 @@
     --chess-label-font: 600 14px 'Comic Sans MS', cursive;
 }
 
-.chess_wrapper {
+.board-wrap {
     display: grid;
+    width: var(--chess-board-size);
+    height: var(--chess-board-size);
     grid-template-columns: auto var(--chess-board-size);
     grid-template-rows: var(--chess-board-size) auto;
     gap: 8px;

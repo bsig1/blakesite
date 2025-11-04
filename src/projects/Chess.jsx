@@ -1,4 +1,5 @@
 import './Chess.css';
+import * as PIXI from "pixi.js"
 
 const files = ["a","b","c","d","e","f","g","h"];
 
@@ -69,18 +70,14 @@ const Chess = () => {
         }
     }
 
+
     return (
         <>
-            <h1 className="page-title">Chess</h1>
-            <div className="chess_wrapper">
-                <div className="ranks">
-                    {ranks.map((r) => <div key={r}>{r}</div>)}
+            <div
+                className="board-wrap"
+            >
+                    <div className="chess_board">{squares}</div>
                 </div>
-                <div className="chess_board">{squares}</div>
-                <div className="files">
-                    {files.map((f) => <div key={f}>{f.toUpperCase()}</div>)}
-                </div>
-            </div>
         </>
     );
 };

@@ -91,8 +91,7 @@ export default function TwoBodyVisualizer() {
     const [showTrails, setShowTrails] = useState(true);
     const [collide, setCollide] = useState(true);   // enable collisions
     const [e, setE] = useState(0.2);               // restitution [0..1]
-
-    // NEW: Initial velocities (applied on Reset)
+    
     const [v1x, setV1x] = useState(0);
     const [v1y, setV1y] = useState(0);
     const [v2x, setV2x] = useState(0);
