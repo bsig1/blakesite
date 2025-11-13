@@ -16,6 +16,8 @@ const squareToIdx = (sq) => {
     return fileToX(sq[0]) + rankToY(sq[1]) * 8;
 };
 
+
+
 const defaultColors = {
     light: 0xEEEED2,
     dark: 0x769656,
@@ -62,6 +64,11 @@ const PixiChessBoard = forwardRef(function PixiChessBoard(
     const lastMoveRef = useRef({ from: null, to: null });
     const selected = useRef(null);
     const selected_square = useRef(null);
+    const dragRef = useRef({
+        spr: null,         // the sprite being dragged
+        fromIndex: null,   // 0..63 where drag started (optional)
+        offset: null,      // pointer->sprite local offset
+    });
 
     const [ready, setReady] = useState(false);
     const [squareSize, setSquareSize] = useState(0);
@@ -114,6 +121,42 @@ const PixiChessBoard = forwardRef(function PixiChessBoard(
 
             // draw static board
             drawBoard(squaresLayer, squareSize, colors);
+
+            // enable stage pointer events
+            app.stage.eventMode = "static";
+
+            // DRAG MOVE
+            app.stage.on("pointermove", (e) => {
+                const d = dragRef.current;
+                if (!d.spr) return;
+
+                // convert pointer to sprite's parent space
+                const parentPoint = d.spr.parent.toLocal(e.global);
+                d.spr.position.set(parentPoint.x - d.offset.x, parentPoint.y - d.offset.y);
+            });
+
+            // DRAG END (drop anywhere)
+            const endDrag = () => {
+                const d = dragRef.current;
+                if (!d.spr) return;
+
+                d.spr.alpha = 1;
+                d.spr.zIndex = 1;
+                d.spr.cursor = "grab";
+                dragRef.current = { spr: null, fromIndex: null, offset: null };
+
+                const { x, y } = d.spr;
+                const idx = Math.floor(y / squareSize) * 8 + Math.floor(x / squareSize);
+                d.spr.position.set(
+                    (idx % 8) * squareSize + squareSize / 2,
+                    Math.floor(idx / 8) * squareSize + squareSize / 2
+                );
+                highlightSquare(idx);
+            };
+
+            app.stage.on("pointerup", endDrag);
+            app.stage.on("pointerupoutside", endDrag);
+
 
             // Pixi is ready; pieces effect can run now
             setReady(true);
@@ -202,16 +245,28 @@ const PixiChessBoard = forwardRef(function PixiChessBoard(
                 spr.eventMode = "static";     // enable pointer events on the sprite
                 spr.cursor = "grab";          // open hand on hover
                 const ev = appRef.current?.renderer?.events;
-                if(!ev) continue;
+                if (!ev) continue;
 
-                spr.on("pointerdown", () => {
-                    queueMicrotask(() => ev.setCursor("grabbing"));
+                spr.eventMode = "static";
+                spr.cursor = "grab";
+
+                spr.on("pointerdown", (e) => {
+                    // start drag
+                    const offset = e.getLocalPosition(spr);         // where inside the sprite you grabbed
+                    dragRef.current = { spr, fromIndex: i, offset }; // i is your current 0..63 loop index
+
+                    spr.alpha = 0.85;
+                    spr.zIndex = 999;
+                    spr.cursor = "grabbing";
+
                     if (selected_square.current) {
                         highlightLayerRef.current.removeChild(selected_square.current);
+                        selected_square.current = null;
                     }
                     selected.current = i;
                     selected_square.current = highlightSquare(i, colors.selected_color);
                 });
+
                 spr.on("pointerup", () => queueMicrotask(() => ev.setCursor("grab")));
                 spr.on("pointerupoutside", () => queueMicrotask(() => ev.setCursor("grab")));
 
