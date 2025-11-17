@@ -51,7 +51,7 @@ const Chess = () => {
 
     return (
         <>
-            <h1 className="page-title">Chess</h1>
+            <h1 className="page-title">Chess WIP</h1>
             <div className="chess_wrapper" style={{ gap: 16 }}>
                 <PixiChessBoard
                     ref={pixiRef}
