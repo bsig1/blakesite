@@ -1,73 +1,98 @@
-// Chess.jsx
-import { useMemo, useRef, useState } from "react";
-import PixiChessBoard from "./PixiChessBoard.jsx";
-import "./Chess.css";
+import { Chessboard } from "react-chessboard";
+import { useState, useRef } from "react";
+import { Chess } from "chess.js";
+import "./chess.css";
 
-const files = ["a", "b", "c", "d", "e", "f", "g", "h"];
+export default function AutoSizeBoard() {
+  // --- chess.js game state (from the top example) ---
+  const chessGameRef = useRef(new Chess());
+  const chessGame = chessGameRef.current;
 
-class Piece {
-    constructor(color, piece_type) {
-        this.color = color;
-        this.type = piece_type;
+  const [chessPosition, setChessPosition] = useState(chessGame.fen());
+
+  // unified onPieceDrop used by both boards
+  const onPieceDrop = ({ sourceSquare, targetSquare, piece }) => {
+    // targetSquare can be null if dropped off board
+    if (!targetSquare) return false;
+
+    // chess.js move handling (from the top example)
+    try {
+      const move = chessGame.move({
+        from: sourceSquare,
+        to: targetSquare,
+        promotion: "q", // always promote to queen for now
+      });
+
+      if (!move) return false;
+
+      setChessPosition(chessGame.fen());
+      return true; // accept the move
+    } catch {
+      return false; // illegal => snap back
     }
-    get_sprite() {
-        return `/chess_pieces/${this.color}-${this.type}.png`;
-    }
+  };
+
+  // allow white to only drag white pieces
+  const canDragPieceWhite = ({ piece }) => piece.pieceType[0] === "w";
+
+  // allow black to only drag black pieces
+  const canDragPieceBlack = ({ piece }) => piece.pieceType[0] === "b";
+
+  // base options shared by both boards
+  const baseOptions = {
+    position: chessPosition,
+    onPieceDrop,
+  };
+
+  const whiteBoardOptions = {
+    ...baseOptions,
+    canDragPiece: canDragPieceWhite,
+    boardOrientation: "white",
+    id: "multiplayer-white",
+  };
+
+  const blackBoardOptions = {
+    ...baseOptions,
+    canDragPiece: canDragPieceBlack,
+    boardOrientation: "black",
+    id: "multiplayer-black",
+  };
+
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "1rem",
+        alignItems: "center",
+      }}
+    >
+
+
+      {/* Two synchronized boards (top example) */}
+      <div
+        style={{
+          display: "flex",
+          gap: "20px",
+          justifyContent: "center",
+          flexWrap: "wrap",
+          padding: "10px",
+        }}
+      >
+        <div>
+          <p style={{ textAlign: "center" }}>White&apos;s perspective</p>
+          <div className="chess_wrapper">{/* e.g. max-width in CSS */}
+            <Chessboard options={whiteBoardOptions} />
+          </div>
+        </div>
+
+        <div>
+          <p style={{ textAlign: "center" }}>Black&apos;s perspective</p>
+          <div className="chess_wrapper">
+            <Chessboard options={blackBoardOptions} />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
-
-class ChessBoard {
-    constructor() {
-        this.state = Array(64).fill(null);
-        this.initialize();
-    }
-    initialize() {
-        const backRank = ["rook", "knight", "bishop", "queen", "king", "bishop", "knight", "rook"];
-        for (let i = 0; i < 8; i++) {
-            this.state[56 + i] = new Piece("white", backRank[i]);
-            this.state[48 + i] = new Piece("white", "pawn");
-        }
-        for (let i = 0; i < 8; i++) {
-            this.state[i] = new Piece("black", backRank[i]);
-            this.state[8 + i] = new Piece("black", "pawn");
-        }
-    }
-}
-
-function toPixiState(board) {
-    // Convert your board.state (index 0..63) to an array of {color,type} or null
-    return board.state.map((p) => (p ? { color: p.color, type: p.type } : null));
-}
-
-const Chess = () => {
-    const boardObj = useMemo(() => new ChessBoard(), []);
-    const [boardState] = useState(() => toPixiState(boardObj));
-    const pixiRef = useRef(null);
-
-    const demoMove = () => {
-        // Animate e2 -> e4
-        pixiRef.current.move("e2", "e4", { duration: 200 });
-    };
-
-
-    return (
-        <>
-            <h1 className="page-title">Chess WIP</h1>
-            <div className="chess_wrapper" style={{ gap: 16 }}>
-                <PixiChessBoard
-                    ref={pixiRef}
-                    boardState={boardState}
-                    onSquareClick={(sq, button) => {
-                        if (button === "right") console.log("Right-clicked:", sq);
-                        else console.log("Left-clicked:", sq);
-                    }}
-                />
-            </div>
-            <div className="controls">
-                <button onClick={demoMove}>Animate e2 → e4</button>
-            </div>
-
-        </>
-    );
-};
-
-export default Chess;
