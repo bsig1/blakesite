@@ -10,7 +10,7 @@ const Navbar = () => {
     const navigate = useNavigate();
     const [displayName, setDisplayName] = useState(null);
 
-    // ✅ Fetch the current user's display name or email
+    // Fetch the current user's display name or email
     useEffect(() => {
         (async () => {
             if (authStatus === 'authenticated') {

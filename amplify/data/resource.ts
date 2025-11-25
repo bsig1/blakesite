@@ -7,12 +7,42 @@ specifies that any unauthenticated user can "create", "read", "update",
 and "delete" any "Todo" records.
 =========================================================================*/
 const schema = a.schema({
-  Todo: a
+  Move: a
     .model({
-      content: a.string(),
+      id: a.id(),
+      gameId: a.string().required(),
+      from: a.string().required(),
+      to: a.string().required(),
+      san: a.string().required(),
+      fenAfter: a.string().required(),
+      createdAt: a.datetime().required(),
     })
-    .authorization((allow) => [allow.guest()]),
+    .identifier(["id"])
+    .authorization((allow) => [
+      allow.guest(),
+      allow.authenticated("identityPool"),
+    ]),
+
+  Game: a
+    .model({
+      id: a.id(),
+      fen: a.string().required(),
+      turn: a.string().required(),       // "w" or "b"
+      status: a.string().required(),     // "WAITING", "IN_PROGRESS", etc.
+      whitePlayerId: a.string(),
+      blackPlayerId: a.string(),
+      whitePlayerName: a.string(), 
+      blackPlayerName: a.string(),  
+      createdAt: a.datetime().required(),
+    })
+    .identifier(["id"])
+    .authorization((allow) => [
+      allow.guest(),
+      allow.authenticated("identityPool"),
+    ]),
 });
+
+
 
 export type Schema = ClientSchema<typeof schema>;
 
