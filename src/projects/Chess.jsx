@@ -1,7 +1,7 @@
 import { Chessboard } from "react-chessboard";
 import { useState, useRef } from "react";
 import { Chess } from "chess.js";
-import "./chess.css";
+import "./Chess.css";
 
 export default function AutoSizeBoard() {
   // --- chess.js game state (from the top example) ---
