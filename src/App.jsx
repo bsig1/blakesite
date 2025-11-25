@@ -10,7 +10,6 @@ import Project1 from "./projects/Project_2048.jsx";
 import Project2 from "./projects/Chess.jsx";
 import Project3 from "./projects/two_body.jsx";
 import Login from './pages/Login.jsx';
-import Graph from './graphql_debug.jsx'
 import {Authenticator} from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 import { Amplify } from "aws-amplify";
@@ -33,7 +32,6 @@ function App() {
                             <Route path="/projects/Chess" element={<Project2/>}/>
                             <Route path="/projects/two_body" element={<Project3/>}/>
                             <Route path="/login" element={<Login/>} />
-                            <Route path='/graph' element={<Graph/>}/>
                             <Route path="/*" element={<NoPage/>}/>
                         </Routes>
                     </div>
