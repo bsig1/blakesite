@@ -1,0 +1,36 @@
+.board_icons {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.chess_wrapper {
+    display: flex;
+    justify-content: center;
+    width: 250px;
+    height: 250px;
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+
+.action_buttons {
+    justify-content: center;
+}
+
+
+@media screen and (min-width: 768px) {
+    .chess_wrapper {
+        width: 400px;
+        height: 400px;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .chess_wrapper {
+        width: 500px;
+        height: 500px;
+    }
+
+}

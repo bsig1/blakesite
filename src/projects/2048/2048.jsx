@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import "./Project_2048.css"
+import "./2048.css"
 
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);

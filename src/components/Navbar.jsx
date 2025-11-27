@@ -28,22 +28,6 @@ const Navbar = () => {
         })();
     }, [authStatus]);
 
-    useEffect(() => {
-        if (authStatus !== 'authenticated') {
-            const existingGuest = localStorage.getItem('guestName');
-            if (existingGuest) {
-                setDisplayName(existingGuest);
-            } else {
-                // generate fun random name
-                const adjectives = ['Swift', 'Calm', 'Brave', 'Clever', 'Lucky'];
-                const animals = ['Fox', 'Otter', 'Hawk', 'Panda', 'Wolf'];
-                const name = `${adjectives[Math.floor(Math.random() * adjectives.length)]}${animals[Math.floor(Math.random() * animals.length)]}${Math.floor(Math.random() * 1000)}`;
-                localStorage.setItem('guestName', name);
-                setDisplayName(name);
-            }
-        }
-    }, [authStatus]);
-
     const handleAuthClick = () => {
         if (authStatus === 'authenticated') {
             signOut();
