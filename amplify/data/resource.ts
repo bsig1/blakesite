@@ -37,6 +37,17 @@ const schema = a.schema({
       allow.guest(),
       allow.authenticated("identityPool"),
     ]),
+
+  UserElo: a
+    .model({
+      id: a.id(),
+      elo: a.integer().default(1200),
+    })
+    .authorization((allow) => [
+      // match Game/Move auth
+      allow.guest(),
+      allow.authenticated("identityPool"),
+    ]),
 });
 
 
