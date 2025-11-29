@@ -6,7 +6,6 @@ Amplify.configure(outputs);
 import { generateClient } from "aws-amplify/data";
 import { Chess } from "chess.js";
 
-
 const client = generateClient();
 
 export default function ChessLobby({ activeGameId, onSelectGame }) {
@@ -17,6 +16,7 @@ export default function ChessLobby({ activeGameId, onSelectGame }) {
 
   const [isOpen, setIsOpen] = useState(true);
 
+  // Single subscription with TTL filtering
   useEffect(() => {
     let sub;
 
@@ -24,30 +24,40 @@ export default function ChessLobby({ activeGameId, onSelectGame }) {
       setLoading(true);
       setError("");
 
-      sub = client.models.Game.observeQuery(
-        {},
-        { authMode: "identityPool" }
-      ).subscribe({
-        next: ({ items }) => {
-          const sorted = [...items].sort((a, b) => {
-            if (!a.createdAt || !b.createdAt) return 0;
-            return a.createdAt < b.createdAt ? 1 : -1;
-          });
-          setGames(sorted);
-          setLoading(false);
-        },
-        error: (err) => {
-          console.error("Game lobby observeQuery error:", err);
-          setError("Failed to load games");
-          setLoading(false);
-        },
-      });
+      sub = client.models.Game
+        .observeQuery({}, { authMode: "identityPool" })
+        .subscribe({
+          next: ({ items }) => {
+            const nowSec = Math.floor(Date.now() / 1000);
+
+            // Filter out expired games (or keep all if expiresAt is not set)
+            const valid = items.filter(
+              (g) => !g.expiresAt || g.expiresAt > nowSec
+            );
+
+            const sorted = [...valid].sort((a, b) => {
+              if (!a.createdAt || !b.createdAt) return 0;
+              return a.createdAt < b.createdAt ? 1 : -1;
+            });
+
+            setGames(sorted);
+            setLoading(false);
+          },
+          error: (err) => {
+            console.error("[LOBBY] Game lobby observeQuery error:", err);
+            setError("Failed to load games");
+            setLoading(false);
+          },
+        });
     }
 
     subscribe();
-    return () => sub && sub.unsubscribe();
+    return () => {
+      if (sub) sub.unsubscribe();
+    };
   }, []);
 
+  // Create new game with safe result handling
   async function createNewGame() {
     try {
       setCreating(true);
@@ -56,7 +66,7 @@ export default function ChessLobby({ activeGameId, onSelectGame }) {
       const chess = new Chess();
       const now = new Date().toISOString();
 
-      const ttlSeconds = 1 * 24 * 60 * 60;
+      const ttlSeconds = 1 * 24 * 60 * 60; // 1 day
       const expiresAt = Math.floor(Date.now() / 1000) + ttlSeconds;
 
       const res = await client.models.Game.create({
@@ -67,6 +77,21 @@ export default function ChessLobby({ activeGameId, onSelectGame }) {
         expiresAt,
       });
 
+      console.log("[CREATE GAME] result:", res);
+
+      // If backend rejected the create, data will be null and errors set
+      if (res.errors && res.errors.length > 0) {
+        console.error("[CREATE GAME] errors:", res.errors);
+        setError("Could not create game (server error)");
+        return;
+      }
+
+      if (!res.data) {
+        console.error("[CREATE GAME] no data returned:", res);
+        setError("Could not create game");
+        return;
+      }
+
       onSelectGame(res.data.id);
     } catch (e) {
       console.error("Failed to create game:", e);
@@ -75,49 +100,13 @@ export default function ChessLobby({ activeGameId, onSelectGame }) {
       setCreating(false);
     }
   }
-  useEffect(() => {
-    let sub;
-
-    async function subscribe() {
-      setLoading(true);
-      setError("");
-
-      sub = client.models.Game.observeQuery(
-        {},
-        { authMode: "identityPool" }
-      ).subscribe({
-        next: ({ items }) => {
-
-
-          const valid = items.filter(
-            (g) => !g.expiresAt || g.expiresAt > nowSec
-          );
-          const sorted = [...valid].sort((a, b) => {
-            if (!a.createdAt || !b.createdAt) return 0;
-            return a.createdAt < b.createdAt ? 1 : -1;
-          });
-          const nowSec = Math.floor(Date.now() / 1000);
-          setGames(sorted);
-          setLoading(false);
-        },
-        error: (err) => {
-          console.error("Game lobby observeQuery error:", err);
-          setError("Failed to load games");
-          setLoading(false);
-        },
-      });
-    }
-
-    subscribe();
-    return () => sub && sub.unsubscribe();
-  }, []);
 
   // if the remembered activeGameId no longer exists, clear it
   useEffect(() => {
     if (!loading && activeGameId) {
       const exists = games.some((g) => g.id === activeGameId);
       if (!exists) {
-        onSelectGame(null); // this also clears localStorage via parent effect
+        onSelectGame(null);
       }
     }
   }, [loading, games, activeGameId, onSelectGame]);
@@ -129,7 +118,7 @@ export default function ChessLobby({ activeGameId, onSelectGame }) {
         borderRight: isOpen ? "1px solid #ddd" : "none",
       }}
     >
-      {/*Toggle */}
+      {/* Toggle */}
       <div
         style={{
           display: "flex",
@@ -137,7 +126,6 @@ export default function ChessLobby({ activeGameId, onSelectGame }) {
           marginBottom: "0.5rem",
         }}
       >
-
         <button
           style={{
             marginLeft: "auto",
@@ -156,7 +144,11 @@ export default function ChessLobby({ activeGameId, onSelectGame }) {
         <>
           <h2 style={{ marginBottom: "30px" }}>Chess Lobby</h2>
           <h2 style={{ marginBottom: "30px" }}>Games: </h2>
-          <button style={{ marginLeft: "auto" }} onClick={createNewGame} disabled={creating}>
+          <button
+            style={{ marginLeft: "auto" }}
+            onClick={createNewGame}
+            disabled={creating}
+          >
             {creating ? "Creating..." : "Create New Game"}
           </button>
 
@@ -186,8 +178,8 @@ export default function ChessLobby({ activeGameId, onSelectGame }) {
                       {g.status === "IN_PROGRESS"
                         ? "In Progress"
                         : g.status === "WAITING"
-                          ? "Waiting"
-                          : g.status}
+                        ? "Waiting"
+                        : g.status}
                     </span>
                   </div>
                   <div style={{ fontSize: "0.85rem", opacity: 0.8 }}>
@@ -199,7 +191,8 @@ export default function ChessLobby({ activeGameId, onSelectGame }) {
                       : "-"}
                   </div>
                   <div style={{ fontSize: "0.8rem", opacity: 0.7 }}>
-                    White: {g.whitePlayerName || "—"} | Black:{" "} {g.blackPlayerName || "—"}
+                    White: {g.whitePlayerName || "—"} | Black:{" "}
+                    {g.blackPlayerName || "—"}
                   </div>
                 </li>
               );
