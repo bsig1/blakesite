@@ -10,7 +10,6 @@ const schema = a.schema({
       san: a.string().required(),
       fenAfter: a.string().required(),
       createdAt: a.datetime().required(),
-      expiresAt: a.integer(),
     })
     .identifier(["id"])
     .authorization((allow) => [
@@ -29,6 +28,7 @@ const schema = a.schema({
       whitePlayerName: a.string(),
       blackPlayerName: a.string(),
       createdAt: a.datetime().required(),
+      expiresAt: a.integer(),
 
       drawOfferBy: a.string(),
     })
