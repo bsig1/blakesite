@@ -343,12 +343,9 @@ export default function ChessGame({ gameId, onGameDeleted }) {
         }
     }
 
-    // auth mode: keep this consistent with your other models
-    const ELO_AUTH = { authMode: "identityPool" }; // or "userPool" if that’s what works
+    const ELO_AUTH = { authMode: "identityPool" };
 
     async function updateElo(turn, score) {
-        // Only handle decisive games for now; your getGameScore
-        // is giving 1 for "game over" and NaN/0 otherwise.
         if (score !== 1) return;
 
         if (!gameModel) return;
@@ -442,7 +439,7 @@ export default function ChessGame({ gameId, onGameDeleted }) {
         const turnBefore = move.color; // "w" or "b" who just moved
         const newTurn = gameEngine.turn();
 
-        // Elo update if your getGameScore says it's over
+        // Elo update if getGameScore says it's over
         if (score) {
             await updateElo(turnBefore, score);
         }
