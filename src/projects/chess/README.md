@@ -31,11 +31,9 @@ A fully functional multiplayer chess site with many of the features expected tod
 - Board rotation button
 - **ELO measured in MCBAC** (Magnus Carlson Blood Alcohol Content)  
   - MCBAC is a humorous model approximating *how drunk Magnus would need to be* to play at a given rating  
-  - Defined by  
-    \[
-    B(R) = 0.12 + \frac{1}{11.42}\ln\!\left(\frac{2445.31}{(R - 900)} - 1\right)
-    \]
-    If \(R \le 900\), the site displays a skull and crossbones.
+  - Defined by the logistic-style equation:  
+    **B(R) = 0.12 + (1 / 11.42) * ln(2445.31 / (R - 900) - 1)**  
+    If **R ≤ 900**, the site displays a skull and crossbones.
 - **En Passant is forced** (if it's legal, you *must* play it)
 
 ### Lobby System
