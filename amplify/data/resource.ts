@@ -38,7 +38,7 @@ const schema = a.schema({
       allow.authenticated("identityPool"),
     ]),
 
-  UserElo: a
+  PlayerElo: a
     .model({
       id: a.id(),
       elo: a.integer().default(1200),
