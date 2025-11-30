@@ -43,10 +43,10 @@ const schema = a.schema({
       id: a.id(),
       elo: a.integer().default(1200),
     })
+    .identifier(["id"]) // match Game/Move style
     .authorization((allow) => [
-      // match Game/Move auth
-      allow.guest(),
-      allow.authenticated("identityPool"),
+      allow.guest(),                    // unauth guest
+      allow.authenticated("identityPool"), // logged-in / identityPool users
     ]),
 });
 
