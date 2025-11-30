@@ -270,17 +270,25 @@ export default function ChessGame({ gameId, onGameDeleted }) {
             if (!ids.length) return;
 
             try {
+                const authOptions = { authMode: "identityPool" };
+
                 const results = await Promise.all(
                     ids.map((id) =>
-                        client.models.UserElo.get({ id }, { authMode: "identityPool" })
+                        client.models.UserElo.get({ id }, authOptions)
                     )
                 );
-                console.log("[ELO] results", results);
+
+                const newMap = {};
+                results.forEach((resp, i) => {
+                    const id = ids[i];
+                    if (resp.data?.elo != null) {
+                        newMap[id] = resp.data.elo;
+                    }
+                });
+
+                setEloByUserId((prev) => ({ ...prev, ...newMap }));
             } catch (err) {
-                console.error(
-                    "[ELO] Failed to load elos for players",
-                    JSON.stringify(err, null, 2)
-                );
+                console.error("[ELO] Failed to load elos for players", err);
             }
         }
 
@@ -1156,49 +1164,49 @@ export default function ChessGame({ gameId, onGameDeleted }) {
                     >
                         <div className="chess_wrapper">
                             <Chessboard options={boardOptions} />
-                            {pendingPromotion && (
+                                        {pendingPromotion && (
                                 <div
                                     style={{
-                                        position: "fixed",
-                                        inset: 0,
-                                        background: "rgba(0, 0, 0, 0.5)",
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        zIndex: 999,
+                                    position: "fixed",
+                                    inset: 0,
+                                    background: "rgba(0, 0, 0, 0.5)",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    zIndex: 999,
                                     }}
                                 >
                                     <div
-                                        style={{
-                                            background: "#222",
-                                            padding: "1rem",
-                                            borderRadius: "8px",
-                                            display: "flex",
-                                            gap: "0.5rem",
-                                        }}
+                                    style={{
+                                        background: "#222",
+                                        padding: "1rem",
+                                        borderRadius: "8px",
+                                        display: "flex",
+                                        gap: "0.5rem",
+                                    }}
                                     >
-                                        {["q", "r", "b", "n"].map((piece) => (
-                                            <button
-                                                key={piece}
-                                                onClick={() => handlePromotionChoice(piece)}
-                                                style={{
-                                                    fontSize: "2rem",
-                                                    padding: "0.5rem 0.75rem",
-                                                    cursor: "pointer",
-                                                    background: "#333",
-                                                    border: "1px solid #555",
-                                                    borderRadius: "4px",
-                                                }}
-                                            >
-                                                {piece === "q" && "♕"}
-                                                {piece === "r" && "♖"}
-                                                {piece === "b" && "♗"}
-                                                {piece === "n" && "♘"}
-                                            </button>
-                                        ))}
+                                    {["q", "r", "b", "n"].map((piece) => (
+                                        <button
+                                        key={piece}
+                                        onClick={() => handlePromotionChoice(piece)}
+                                        style={{
+                                            fontSize: "2rem",
+                                            padding: "0.5rem 0.75rem",
+                                            cursor: "pointer",
+                                            background: "#333",
+                                            border: "1px solid #555",
+                                            borderRadius: "4px",
+                                        }}
+                                        >
+                                        {piece === "q" && "♕"}
+                                        {piece === "r" && "♖"}
+                                        {piece === "b" && "♗"}
+                                        {piece === "n" && "♘"}
+                                        </button>
+                                    ))}
                                     </div>
                                 </div>
-                            )}
+                                )}
                         </div>
                     </div>
 
