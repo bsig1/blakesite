@@ -109,9 +109,3 @@ IdentityPool is used for:
 - Enabling **unauthenticated** (guest) read access to lobbies and games
 - Allowing **authenticated** users to create/join games
 
-Your schema uses:
-
-```ts
-allow.guest()
-allow.authenticated("identityPool")
-
