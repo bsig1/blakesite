@@ -62,3 +62,56 @@ This project is broken into three main React components: **ChessApp**, **ChessLo
    - **Offer Draw** (writes a draw request into the game document; the other client surfaces a UI prompt)  
 8. When the game ends, “Play Again” and “Delete Game” buttons appear.  
 9. All games automatically expire and are removed after 24 hours via DynamoDB TTL.
+
+## Architecture Overview
+
+This project uses a lightweight, serverless architecture centered around **AWS Amplify**, **Cognito**, and **DynamoDB**, with all game logic enforced on the client for speed and cost efficiency.
+
+### Frontend Architecture
+- **React** manages UI state, rendering, and interactivity.
+- **React-Chessboard** provides a flexible, draggable chess UI.
+- **Chess.js** handles all rules, move validation, FEN updates, and SAN generation.
+- **observeQuery** from AWS Amplify provides real-time synchronization of Game and Move documents.
+
+### Backend Architecture
+The backend consists entirely of:
+- **AppSync GraphQL API**
+- **DynamoDB tables** (one for `Game`, one for `Move`, one for `PlayerElo`)
+- **Cognito Authentication**
+- **Amplify Data client** for reads/writes/subscriptions
+
+The server *never* validates moves.  
+Clients send moves optimistically, and DynamoDB holds authoritative state.
+
+### Auth Architecture: Identity Pool vs User Pool
+
+This project uses both types of AWS Cognito pools, each for different reasons.
+
+#### **Cognito User Pool — actual user identities**
+- Handles **user login**, **passwords**, **email**, and **authentication**.
+- When a user logs in, they receive a **User Pool token** containing:
+  - `sub` (unique user ID)
+  - username
+- Used for:
+  - Showing usernames in the UI
+  - Assigning players to White/Black slots
+  - Restricting joining a game to logged-in users only
+
+The UserPool is “who you are.”
+
+#### **Cognito Identity Pool — authorization for data access**
+Amplify uses an **Identity Pool** to issue AWS IAM credentials after login.  
+These credentials determine what you’re allowed to read/write via GraphQL.
+
+IdentityPool is used for:
+- Accessing the **GraphQL API**
+- Accessing **DynamoDB** through AppSync
+- Enabling **unauthenticated** (guest) read access to lobbies and games
+- Allowing **authenticated** users to create/join games
+
+Your schema uses:
+
+```ts
+allow.guest()
+allow.authenticated("identityPool")
+
