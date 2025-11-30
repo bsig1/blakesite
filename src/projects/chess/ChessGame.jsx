@@ -270,11 +270,10 @@ export default function ChessGame({ gameId, onGameDeleted }) {
             if (!ids.length) return;
 
             try {
-                const authOptions = { authMode: "identityPool" };
 
                 const results = await Promise.all(
                     ids.map((id) =>
-                        client.models.UserElo.get({ id }, authOptions)
+                        client.models.UserElo.get({ id }, { authMode: "identityPool" })
                     )
                 );
 
@@ -371,8 +370,8 @@ export default function ChessGame({ gameId, onGameDeleted }) {
         try {
             // 1. Get current Elos (default to 1200 if missing)
             const [whiteResp, blackResp] = await Promise.all([
-                client.models.UserElo.get({ id: whiteUserId }, ELO_AUTH),
-                client.models.UserElo.get({ id: blackUserId }, ELO_AUTH),
+                client.models.UserElo.get({ id: whiteUserId }, { authMode: "identityPool" }),
+                client.models.UserElo.get({ id: blackUserId }, { authMode: "identityPool" }),
             ]);
 
             if (whiteResp.errors?.length) {
@@ -398,11 +397,11 @@ export default function ChessGame({ gameId, onGameDeleted }) {
             const [whiteUpdate, blackUpdate] = await Promise.all([
                 client.models.UserElo.update(
                     { id: whiteUserId, elo: newWhiteElo },
-                    ELO_AUTH
+                    { authMode: "identityPool" }
                 ),
                 client.models.UserElo.update(
                     { id: blackUserId, elo: newBlackElo },
-                    ELO_AUTH
+                    { authMode: "identityPool" }
                 ),
             ]);
 
@@ -934,12 +933,11 @@ export default function ChessGame({ gameId, onGameDeleted }) {
         const whiteScore = winnerWhite ? 1 : 0;
 
         try {
-            const ELO_AUTH = { authMode: "identityPool" }; // or userPool, depending on your setup
 
             // Get current Elos
             const [whiteResp, blackResp] = await Promise.all([
-                client.models.UserElo.get({ id: whiteUserId }, ELO_AUTH),
-                client.models.UserElo.get({ id: blackUserId }, ELO_AUTH),
+                client.models.UserElo.get({ id: whiteUserId }, { authMode: "identityPool" }),
+                client.models.UserElo.get({ id: blackUserId }, { authMode: "identityPool" }),
             ]);
 
             const whiteElo = whiteResp.data?.elo ?? 1200;
@@ -950,8 +948,8 @@ export default function ChessGame({ gameId, onGameDeleted }) {
 
             // Write updates
             await Promise.all([
-                client.models.UserElo.update({ id: whiteUserId, elo: newWhiteElo }, ELO_AUTH),
-                client.models.UserElo.update({ id: blackUserId, elo: newBlackElo }, ELO_AUTH),
+                client.models.UserElo.update({ id: whiteUserId, elo: newWhiteElo }, { authMode: "identityPool" }),
+                client.models.UserElo.update({ id: blackUserId, elo: newBlackElo }, { authMode: "identityPool" }),
             ]);
 
             console.log("[ELO] Updated after resignation:", {
