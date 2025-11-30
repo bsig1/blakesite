@@ -20,10 +20,10 @@ async function ensureUserElo() {
 
     const userId = attrs.sub;
 
-    const authOptions = { authMode: "userPool" };
+    const authOptions = { authMode: "identityPool" };
 
     // 2. Try to GET existing UserElo
-    const getResp = await client.models.UserElo.get({ id: userId }, authOptions);
+    const getResp = await client.models.PlayerElo.get({ id: userId }, authOptions);
 
     if (getResp.errors && getResp.errors.length) {
       console.error("[ELO] get UserElo GraphQL error:", getResp.errors);
@@ -36,7 +36,7 @@ async function ensureUserElo() {
     }
 
     // 3. Create default Elo if missing
-    const createResp = await client.models.UserElo.create(
+    const createResp = await client.models.PlayerElo.create(
       { id: userId, elo: 1200 },
       authOptions
     );
