@@ -3,13 +3,45 @@
     --nav-h: clamp(56px, 8vw, 88px);
     --nav-gutter: clamp(8px, 2vw, 20px);
     --nav-font: clamp(13px, 3.2vw, 16px);
+
+    /* Light theme defaults */
+    --nav-bg: #fdfdfd;
+    --nav-fg: #111111;
+    --nav-border: rgba(0, 0, 0, 0.12);
+    --nav-divider: #dddddd;
+
+    --nav-button-hover-bg: cornflowerblue;
+    --nav-button-hover-fg: orange;
+
+    --nav-link-active-bg: #e0e0e0;
+    --nav-link-active-fg: #111111;
+
+    --nav-focus-outline: #6aa9ff;
+}
+
+/* Dark theme overrides when system is dark */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --nav-bg: #111111;
+        --nav-fg: #ffffff;
+        --nav-border: rgba(255, 255, 255, 0.12);
+        --nav-divider: #f9f9f9;
+
+        --nav-button-hover-bg: #3b5fb4;  /* darker cornflower-ish */
+        --nav-button-hover-fg: #ffd27f;  /* softer orange */
+
+        --nav-link-active-bg: #444444;
+        --nav-link-active-fg: #ffffff;
+
+        --nav-focus-outline: #6aa9ff;
+    }
 }
 
 nav {
     width: 100%;
-    background: #111;
-    color: #fff;
-    border-bottom: 1px solid rgba(255,255,255,0.12);
+    background: var(--nav-bg);
+    color: var(--nav-fg);
+    border-bottom: 1px solid var(--nav-border);
 }
 
 /* Container */
@@ -80,18 +112,18 @@ nav {
 }
 
 .button:hover {
-    background-color: cornflowerblue;
-    color: orange;
+    background-color: var(--nav-button-hover-bg);
+    color: var(--nav-button-hover-fg);
 }
 .nav-link.active .button {
-    background: #444;
-    color: #fff;
+    background: var(--nav-link-active-bg);
+    color: var(--nav-link-active-fg);
 }
 
 /* Focus visibility */
 .nav-link:focus-visible .button,
 #navContainer > .nav-link:focus-visible {
-    outline: 2px solid #6aa9ff;
+    outline: 2px solid var(--nav-focus-outline);
     outline-offset: 3px;
     border-radius: 10px;
 }
@@ -130,8 +162,8 @@ nav {
     .navBar {
         overflow: visible;          /* no scroll needed on wide screens */
         gap: var(--nav-gutter);
-        border-right: 1px solid #f9f9f9;
-        margin-left: 80px;          /* your original desktop spacing */
+        border-right: 1px solid var(--nav-divider);
+        margin-left: 80px;
     }
     .navBar > li {
         flex: 0 1 auto;

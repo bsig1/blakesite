@@ -1,0 +1,133 @@
+/* ------------------------------- */
+/* DEFAULT LIGHT THEME VARIABLES   */
+/* ------------------------------- */
+
+.chess-lobby {
+  --lobby-border: #dddddd;
+  --lobby-bg: #ffffff;
+  --text-primary: #222222;
+  --text-muted: #555555;
+  --game-item-bg: #f7f7f7;
+  --game-item-bg-active: #d0e2ff;
+  --game-item-border: #cccccc;
+  --button-bg: #ffffff;
+  --button-border: #cccccc;
+  --button-text: #222222;
+  --button-bg-hover: #e8e8e8;
+  --error-color: #c0392b;
+
+  padding: 1rem;
+}
+
+/* ----------------------------------------- */
+/* DARK THEME APPLIED WHEN SYSTEM IS DARK    */
+/* ----------------------------------------- */
+
+@media (prefers-color-scheme: dark) {
+  .chess-lobby {
+    --lobby-border: #444444;
+    --lobby-bg: #1f1f1f;
+    --text-primary: #f5f5f5;
+    --text-muted: #cccccc;
+    --game-item-bg: #313030;
+    --game-item-bg-active: #505050;
+    --game-item-border: #555555;
+    --button-bg: #313030;
+    --button-border: #555555;
+    --button-text: #f5f5f5;
+    --button-bg-hover: #505050;
+    --error-color: #ff6b6b;
+  }
+}
+
+/* ----------------------------- */
+/* Layout and components         */
+/* ----------------------------- */
+
+.chess-lobby.is-open {
+  border-right: 1px solid var(--lobby-border);
+  background-color: var(--lobby-bg);
+}
+
+.chess-lobby.is-closed {
+  border-right: none;
+}
+
+.lobby-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.toggle-button,
+.create-game-button {
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  border: 1px solid var(--button-border);
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.toggle-button:hover,
+.create-game-button:hover:not(:disabled) {
+  background-color: var(--button-bg-hover);
+}
+
+.create-game-button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.lobby-title {
+  margin-bottom: 30px;
+  color: var(--text-primary);
+}
+
+.lobby-subheader {
+  display: flex;
+  align-items: center;
+}
+
+.games-title {
+  margin-bottom: 30px;
+  color: var(--text-primary);
+}
+
+.lobby-text {
+  color: var(--text-primary);
+}
+
+.lobby-error {
+  color: var(--error-color);
+}
+
+.games-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 1rem;
+}
+
+.game-item {
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.25rem;
+  border-radius: 8px;
+  border: 1px solid var(--game-item-border);
+  background-color: var(--game-item-bg);
+  cursor: pointer;
+  color: var(--text-primary);
+}
+
+.game-item.active {
+  background-color: var(--game-item-bg-active);
+}
+
+.game-status {
+  font-weight: 600;
+}
+
+.game-turn,
+.game-players {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
