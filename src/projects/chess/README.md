@@ -10,6 +10,7 @@ Throughout this project I became much more comfortable with React and AWS backen
 - **AWS Amplify**
 - **GraphQL**
 - **Cognito**
+- **Lichess Openning API**
 
 ## Features
 
